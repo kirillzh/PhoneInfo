@@ -19,6 +19,7 @@ import java.util.HashMap;
 public class InfoActivity extends Activity {
 
     private static Context context;
+    private String ADID;
     private static HashMap<String, String> info = new HashMap<String, String>();
 
     public static HashMap<String, String> getInfo() {
@@ -32,16 +33,20 @@ public class InfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        AsyncTaskAdId asyncTaskAdId = new AsyncTaskAdId();
+//        asyncTaskAdId.delegate = this;
+//        asyncTaskAdId.execute();
         InfoActivity.context = getApplicationContext();
+        getADID();
+        System.out.println(getADID());
 
         info.put("Device Name", android.os.Build.MODEL);
         info.put("Product Name", android.os.Build.PRODUCT);
         info.put("Manufacturer Name", android.os.Build.MANUFACTURER);
         info.put("Product Name", android.os.Build.PRODUCT);
         info.put("Brand Name", android.os.Build.BRAND);
-
-        info.put("ADID", "" + getAdId());
-        info.put("IMEI", ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
+        info.put("ADID", ADID);
+        info.put("IMEI", ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
         setContentView(R.layout.activity_info);
 
         final ListView listViewInfo = (ListView) findViewById(R.id.list_view_info);
@@ -49,8 +54,6 @@ public class InfoActivity extends Activity {
         listViewInfo.setAdapter(arrayAdapter);
 
     }
-
-
 
 
     @Override
@@ -73,21 +76,31 @@ public class InfoActivity extends Activity {
 
     }
 
-    private static String getAdId() {
+//    @Override
+//    public String processFinish(String output) {
+//        return output;
+//    }
 
 
-        AdvertisingIdClient.Info adInfo = null;
-        try {
-            adInfo = AdvertisingIdClient.getAdvertisingIdInfo(InfoActivity.getAppContext());
-        } catch (IOException e) {
-            // Unrecoverable error connecting to Google Play services (e.g.,
-            // the old version of the service doesn't support getting AdvertisingId).
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // Google Play services is not available entirely.
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        }
-        return adInfo != null ? adInfo.getId() : null;
-        //final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
+    public String getADID() {
+        new Thread(new Runnable() {
+            public void run() {
+                AdvertisingIdClient.Info adInfo = null;
+                try {
+                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(InfoActivity.getAppContext());
+                } catch (IOException e) {
+                    // Unrecoverable error connecting to Google Play services (e.g.,
+                    // the old version of the service doesn't support getting AdvertisingId).
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // Google Play services is not available entirely.
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                }
+                ADID = adInfo != null ? adInfo.getId() : null;
+                //final boolean isLAT = adInfo.isLimitAdTrackingEnabled();
+            }
+        }).start();
+        return ADID;
     }
+
 }
