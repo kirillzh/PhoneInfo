@@ -16,7 +16,6 @@ import java.util.Map;
 public class ListViewArrayAdapter extends BaseAdapter {
 
     private final ArrayList<Map.Entry<String, String>> mData;
-    private String[] mKeys;
 
     public ListViewArrayAdapter(Map<String, String> map){
         mData = new ArrayList<Map.Entry<String, String>>();
