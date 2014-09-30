@@ -20,6 +20,7 @@ public class ListViewArrayAdapter extends BaseAdapter {
     public ListViewArrayAdapter(Map<String, String> map){
         mData = new ArrayList<Map.Entry<String, String>>();
         mData.addAll(map.entrySet());
+
     }
 
     @Override
