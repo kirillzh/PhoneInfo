@@ -15,11 +15,11 @@ import java.util.Map;
  */
 public class ListViewArrayAdapter extends BaseAdapter {
 
-    private final ArrayList mData;
+    private final ArrayList<Map.Entry<String, String>> mData;
     private String[] mKeys;
 
     public ListViewArrayAdapter(Map<String, String> map){
-        mData = new ArrayList();
+        mData = new ArrayList<Map.Entry<String, String>>();
         mData.addAll(map.entrySet());
     }
 
@@ -30,12 +30,11 @@ public class ListViewArrayAdapter extends BaseAdapter {
 
     @Override
     public Map.Entry<String, String> getItem(int position) {
-        return (Map.Entry) mData.get(position);
+        return mData.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        // TODO implement you own logic with ID
         return 0;
     }
 
